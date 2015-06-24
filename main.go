@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -25,12 +26,12 @@ func main() {
 
 	theme, _ = tartheme.LoadDir("themes/default")
 
-	static := theme.Prefix("static")
+	static := theme.Prefix("static/")
 
-	templates = theme.Prefix("templates").Templates()
+	templates = theme.Prefix("templates/").Templates()
 
 	router.HandleFunc("/", Index)
-	router.Handle("/static/", http.StripPrefix("/static/", static))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", static))
 
 	router.HandleFunc("/agent/register", Register)
 	router.HandleFunc("/agent/getwork", GetWork)
@@ -40,5 +41,9 @@ func main() {
 }
 
 func Index(rw http.ResponseWriter, req *http.Request) {
-	templates.ExecuteTemplate(rw, "index.tpl", nil)
+	fmt.Println(templates.ExecuteTemplate(rw, "index.tpl", nil))
+}
+
+func NewProject(rw http.ResponseWriter, req *http.Request) {
+
 }
