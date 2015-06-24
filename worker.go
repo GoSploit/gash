@@ -50,9 +50,9 @@ func (wm *WorkerMap) Get(id string) *Worker {
 func (wm *WorkerMap) Add() *Worker {
 	wm.lock.Lock()
 	defer wm.lock.Unlock()
-	bid := make([]byte, 20)
+	bid := make([]byte, 21)
 	rand.Read(bid)
-	id := base64.StdEncoding.EncodeToString(bid)
+	id := base64.URLEncoding.EncodeToString(bid)
 	w := &Worker{
 		ID: id,
 	}

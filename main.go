@@ -19,6 +19,9 @@ var (
 
 func main() {
 	router := mux.NewRouter()
+	Workers = &WorkerMap{
+		workermap: make(map[string]*Worker),
+	}
 
 	theme, _ = tartheme.LoadDir("themes/default")
 
@@ -29,7 +32,11 @@ func main() {
 	router.HandleFunc("/", Index)
 	router.Handle("/static/", http.StripPrefix("/static/", static))
 
-	router.HandleFunc("/api/GetWork", GetWork)
+	router.HandleFunc("/agent/register", Register)
+	router.HandleFunc("/agent/getwork", GetWork)
+	router.HandleFunc("/agent/finishwork", FinishWork)
+
+	http.ListenAndServe(":5126", router)
 }
 
 func Index(rw http.ResponseWriter, req *http.Request) {
